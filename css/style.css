@@ -1,0 +1,92 @@
+*, *:after, *:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+.container {
+	width: 100%;
+	height: 100%;
+}
+
+h1 {
+	text-align: center;
+}
+
+.buttons {
+	width: 400px;
+	margin: 30px auto auto auto;
+	height: 50px;
+}
+
+.buttons ul {
+	padding: 0;
+}
+
+.buttons li {
+	list-style: none;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: lightgrey;
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+}
+
+.ai-button {
+	float: left;
+}
+
+.new-game-button {
+	float: right;
+}
+
+.board-container {
+	width: 400px;
+	margin: auto;
+	height: 400px;
+
+}
+
+.board-cell {
+	width: 33%;
+	border: solid 1px black;
+	float: left;
+	height: 33%;
+	text-align: center;
+	font-size: 3em;
+}
+
+.board-cell p {
+	position: relative;
+	margin: 0;
+	top: 30%;
+}
+
+.ending {
+	margin: 30px auto;
+	text-align: center;
+	font-weight: bold;
+	background-color: lightgreen;
+}
+
+.footer {
+	width: 400px;
+	margin: auto;
+	bottom: 0;
+}
+
+.footer p {
+	display: inline-block;
+	text-align: left;
+	float: left;
+}
+
+.footer a {
+	padding: 10px;
+	text-decoration: none;
+	color: inherit;
+	margin-left: 20px;
+	border-radius: 5px;
+	background-color: lightgrey;
+	float: right;
+}
