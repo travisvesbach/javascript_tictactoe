@@ -2,25 +2,27 @@ var currentPlayer = "";
 var playerOne = new Player('X');
 var playerTwo = new Player('O');
 
+// Player object
 function Player(symbol) {
 	this.symbol = symbol;
 }
 
-
+// Board object
 var board = {
 	cells: [],
 	winners: [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]],
 	game_over: false,
 	winner: "",
+	// Initializes the board
 	initialize: function() {
 		this.cells = ["","","","","","","","",""];
 		this.game_over = false;
 	},
+	// Updates the board when a move is made
 	update: function(index) {
 		this.cells[index] = currentPlayer.symbol;
-		console.log('cells: ' + this.cells);
-		console.log('starting cells: ' + this.startingCells);
 	},
+	// Checks to see if the current player won or if there is a draw
 	check_win: function() {
 		this.winners.forEach(function(array){
 			var count = 0;
@@ -42,8 +44,10 @@ var board = {
 	}
 }
 
+// AI object
 var ai = {
 	active: false,
+	// Turns the AI on or off
 	on_off: function() {
 		if (this.active === true) {
 			this.active = false;
@@ -52,34 +56,27 @@ var ai = {
 			this.active = true;
 			$('.ai-button').html('Turn AI Off');
 		}
-		console.log('ai active: ' + this.active);
 	},
+	// Ai finds and makes a move
 	move: function() {
 		var target = false;
-		console.log('ai target: ' + target);
 		target = this.check_win();
-		console.log('ai target: ' + target);
 		if (target === false) {
 			target = this.check_lose();
-			console.log('ai target: ' + target);
 		}
 		if (target === false) {
 			target = this.check_soon_win();
-			console.log('ai target: ' + target);
 		}
 		if (target === false) {
 			var potential = Math.floor(Math.random() * 9);
-			console.log('ai potential: ' + potential);
 			while (board.cells[potential] === 'X') {
 				potential = Math.floor(Math.random() * 9);
-				console.log('ai potential: ' + potential);
 			}
-			console.log('ai potential: ' + potential);
 			target = potential;
 		}
-		console.log('ai target: ' + target);
 		board.update(target);
 	},
+	//checks to see if the AI has a move that it can win by making
 	check_win: function() {
 		var possibleMove = false;
 		board.winners.forEach(function(array) {
@@ -96,9 +93,9 @@ var ai = {
 				possibleMove = target;
 			} 
 		});
-		console.log('possibleMove: ' + possibleMove);
 		return possibleMove;
 	},
+	// Checks to see of the player has 2 in line so the AI can block
 	check_lose: function() {
 		var possibleMove = false;
 		board.winners.forEach(function(array) {
@@ -115,9 +112,9 @@ var ai = {
 				possibleMove = target;
 			}
 		});
-		console.log('possibleMove: ' + possibleMove);
 		return possibleMove;
 	},		
+	// AI checks for a row that only needs two more for it to win
 	check_soon_win: function() {
 		var possibleMove = false;
 		board.winners.forEach(function(array) {
@@ -137,25 +134,18 @@ var ai = {
 				possibleMove = target;
 			} 
 		});
-		console.log('possibleMove: ' + possibleMove);
 		return possibleMove;
 	}
 
 }
 
+// Prints the board in the browser
 function render() {
 	$('.board-container').html("");
 	$('.board-container').append('<div class="board-cell" id="0"><p>' + board.cells[0] + '</p></div><div class="board-cell" id="1"><p>' + board.cells[1] + '</p></div><div class="board-cell" id="2"><p>' + board.cells[2] + '</p></div><div class="board-cell" id="3"><p>' + board.cells[3] + '</p></div><div class="board-cell" id="4"><p>' + board.cells[4] + '</p></div><div class="board-cell" id="5"><p>' + board.cells[5] + '</p></div><div class="board-cell" id="6"><p>' + board.cells[6] + '</p></div><div class="board-cell" id="7"><p>' + board.cells[7] + '</p></div><div class="board-cell" id="8"><p>' + board.cells[8] + '</p></div>' );
 }
 
-function new_game() {
-	console.log('new game');
-	$('.ending').html(' ');
-	currentPlayer = playerOne;
-	board.initialize();
-	render();
-}
-
+// Checks to see if a click is a valid move for the player, then makes the move.  If the AI is active, it will then call for the AI to make a move.
 function make_move() {
 	var index = this.id;
 	if (board.cells[index] === "") {
@@ -171,8 +161,6 @@ function make_move() {
 			currentPlayer = playerOne;
 		}
 		if (ai.active === true) {
-			console.log(ai.active);
-			console.log('ai is active, so moving');
 			ai.move();
 			render();
 			board.check_win();
@@ -185,6 +173,7 @@ function make_move() {
 	input();
 }
 
+// Reacts when a user clicks on one of the 9 spaces of the board
 function input() {
 	$('#0').on('click', make_move);
 	$('#1').on('click', make_move);
@@ -197,19 +186,38 @@ function input() {
 	$('#8').on('click', make_move);
 }
 
+// Resets settings for a new game
+function new_game() {
+	$('.ending').html(' ');
+	$('.ending').removeClass('player-one');
+	$('.ending').removeClass('player-two');
+	$('.ending').removeClass('draw');
+	currentPlayer = playerOne;
+	board.initialize();
+	render();
+}
+
+// Prints out the results of the game in the browser
 function game_end() {
 	if (board.winner !== 'draw') {
 		$('.ending').html('Game over! ' + currentPlayer.symbol + ' is the winner!');
+		if (currentPlayer === playerOne) {
+			$('.ending').addClass('player-one');
+		} else {
+			$('.ending').addClass('player-two');
+		}
 	} else {
 		$('.ending').html('It\'s a draw! No one wins!');
+		$('.ending').addClass('draw');
 	}
 }
 
+// Starting engine for the game
 function game_engine() {
-	console.log('game engine');
 	new_game();
 	input();
 }
+
 
 $(document).ready(function() {
 	game_engine();
