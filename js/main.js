@@ -51,10 +51,10 @@ var ai = {
 	on_off: function() {
 		if (this.active === true) {
 			this.active = false;
-			$('.ai-button').html('Turn AI On');
+			$('.ai-button').html('AI Off');
 		} else {
 			this.active = true;
-			$('.ai-button').html('Turn AI Off');
+			$('.ai-button').html('AI On');
 		}
 	},
 	// Ai finds and makes a move
@@ -69,7 +69,7 @@ var ai = {
 		}
 		if (target === false) {
 			var potential = Math.floor(Math.random() * 9);
-			while (board.cells[potential] === 'X') {
+			while (board.cells[potential] === 'X' || board.cells[potential] === 'O') {
 				potential = Math.floor(Math.random() * 9);
 			}
 			target = potential;
